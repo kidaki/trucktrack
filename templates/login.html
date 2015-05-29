@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hilt Track Login</title>
+    <link rel="stylesheet" href="/static/semantic/semantic.css" type="text/css">
+    <script src='/static/js/jquery.js'></script>
+    <script src='/static/semantic/semantic.js'></script>
+    <style>
+    .ui.segment.login{
+        max-width:450px;
+        margin:auto;
+        margin-top:20px;
+    }
+    </style>
+</head>
+<body>
+    <div>
+
+        <div class='ui segment login'>
+        <h1 class='ui blue header'>
+            Please Log In
+        </h1>
+        <div class='ui divider'></div>
+        <div class='ui basic form segment'>
+
+            <form class="ui form" method='post' action=''>
+                {% csrf_token %}
+                <div class='two fields'>
+                    <div class='field'>
+                        <label>Username</label>
+                        <input type='text' name='username'/>
+                    </div>
+                    <div class='field'>
+                        <label>Password</label>
+                        <input type='password' name='password'/>
+                    </div>
+                </div>
+                <div class='fields'>
+                    <div class='field'>
+                        <label>&nbsp</label>
+                        <button class='ui blue button'>Log In </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        </div>
+    </div>
+    
+</body>
+    
+</html>

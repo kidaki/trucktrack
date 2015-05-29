@@ -1,0 +1,5 @@
+*sqlite3
+*.pyc
+*.DS_Store
+trucktrack/settings.py
+trucktrack/gunicorn.conf.py

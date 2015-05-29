@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Trip Invoice{% endblock title %}
+{% block script %}
+<script>
+var form_count = {{formset.total_form_count}};
+$(function(){
+    $('.ui.checkbox').checkbox();
+    $('#additional_cost').click(function(){
+        $('#formset').append("\
+        <div class='fields'>\
+            <div class='four wide field'>\
+                <label>Name</label>\
+                <input class='id_{{formset.prefix}}-"+form_count+"-name' name='{{formset.prefix}}-"+form_count+"-name'/>\
+            </div>\
+            <div class='four wide field'>\
+                <label>Cost</label>\
+                <input class='id_{{formset.prefix}}-"+form_count+"-cost' name='{{formset.prefix}}-"+form_count+"-cost'/>\
+            </div>\
+        </div>\
+        ");
+        form_count++;
+        //$('#id_additionalcost_set-INITIAL_FORMS').val(form_count);
+        //$('#id_additionalcost_set-MIN_NUM_FORMS').val(form_count);
+        $('#id_additionalcost_set-TOTAL_FORMS').val(form_count);
+        
+    });
+    
+})
+</script>
+{% endblock %}
+{% block body %}
+<h1>Create Invoice for <a href='/trip/view/{{trip.id}}/'>{{trip}}</a></h1>
+<div class='ui grid'>
+    <div class='row'>
+        <div class='column'></div>
+    </div>
+</div>
+<form class='ui form segment' action='' method='post'>
+    {% csrf_token %}
+    <input type='hidden' name='trip' value='{{trip.id}}'>
+    <input type='hidden' name='faxed_emailed' value='{{form.faxed_emailed.value}}'>
+    <div class='fields'>
+        <div class='three wide field'>
+            <label>Invoice Number</label>
+            {{form.number}}
+        </div>
+        <div class='three wide field'>
+            <label>Date</label>
+            {{form.date}}
+        </div>
+        <div class='three wide field'>
+            <label>Price</label>
+            {{form.price}}
+        </div>
+        <div class='three wide field'>
+            <label>Actual Miles</label>
+            <input type='text' name='actual_miles' id='id_actual_miles' value='{{trip.actual_miles|default:""}}'>
+        </div>
+        <div class='four wide field'>
+            <label>&nbsp</label>
+            <button class='ui blue button' type='submit'>Submit</button>
+            <a class='ui blue button' id='additional_cost'>Additional Cost</a>
+        </div>
+    </div>
+    <div class='ui divider'></div>
+    {{formset.management_form}}
+    <div class='hidden'>
+        
+    </div>
+    <div id='formset'>
+    {% for form in formset %}
+    <div class='fields'>
+        <div class='four wide field'>
+            <label>Name</label>
+            {{form.name}}
+        </div>
+        <div class='four wide field'>
+            <label>Cost</label>
+            {{form.cost}}
+        </div>
+        <div class='four wide field'>
+            <label>Delete</label>
+            <div class='ui checkbox'>
+                {{form.DELETE}}
+            </div>
+        </div>
+        {% for hidden_field in form.hidden_fields %}
+            {{hidden_field}}
+        {% endfor %}
+    </div>
+    {% endfor %}
+    </div>
+</form>
+{% endblock body %}

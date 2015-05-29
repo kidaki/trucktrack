@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% block title %}Trip Form{% endblock %}
+{% block script %}
+<script>
+$(function(){
+    var pickup_form_count = {{pickup_formset.total_form_count}};
+    var delivery_form_count = {{delivery_formset.total_form_count}};
+    $('.ui.checkbox').checkbox();
+    
+    $('#pickup').click(function(){
+        var form = $('.pickup_form').last().clone();
+        form.find('input').each(function(index,el){
+            $(el).attr('name',$(el).attr('name').replace(pickup_form_count-1,pickup_form_count));
+            $(el).attr('id',$(el).attr('id').replace(pickup_form_count-1,pickup_form_count));
+
+        });
+        $('#pickup_formset').append(form);
+        pickup_form_count++;
+        //$('#id_additionalcost_set-INITIAL_FORMS').val(form_count);
+        //$('#id_additionalcost_set-MIN_NUM_FORMS').val(form_count);
+        $('#id_pickup_set-TOTAL_FORMS').val(pickup_form_count);
+        
+    });
+    
+    $('#delivery').click(function(){
+        var form = $('.delivery_form').last().clone();
+        form.find('input').each(function(index,el){
+            $(el).attr('name',$(el).attr('name').replace(delivery_form_count-1,delivery_form_count));
+            $(el).attr('id',$(el).attr('id').replace(delivery_form_count-1,delivery_form_count));
+
+        });
+        $('#delivery_formset').append(form);
+        delivery_form_count++;
+        //$('#id_additionalcost_set-INITIAL_FORMS').val(form_count);
+        //$('#id_additionalcost_set-MIN_NUM_FORMS').val(form_count);
+        $('#id_delivery_set-TOTAL_FORMS').val(delivery_form_count);
+        
+    });
+    
+})
+</script>
+{% endblock %}
+{% block body %}
+<h2>Trip Form</h2>
+<div class='ui divider'></div>
+{% if form.errors %}
+<div class='ui negative message'>
+    Please fill in all required fields
+</div>
+{% endif %}
+<form class='ui form' method='post' action=''>
+    {% csrf_token %}
+    <div class='three fields'>
+        <div class='field'>
+            <label>Company Name</label>
+            {{form.company}}
+        </div>
+        <div class='field'>
+            <label>&nbsp</label>
+            <a href='/company/add/'>Add Company</a>
+        </div>
+    </div>
+    <div class='ui divider'></div>
+    <div class='three fields'>
+        <div class='field'>
+            <label>Load Number</label>
+            {{form.load_number}}
+        </div>
+        <div class='field'>
+            <label>Driver</label>
+            {{form.driver}}
+        </div>
+        <div class='field'>
+            <label>&nbsp</label>
+            <a href='/driver/add/'>Add Driver</a>
+        </div>
+    </div>
+    
+    <h5 class='ui top attached header'>From &nbsp &nbsp<a class='ui tiny blue button' id='pickup'>Add Pickup</a></h5>
+    <div class='ui attached segment' id='pickup_formset'>
+    {{pickup_formset.management_form}}
+    {% for form in pickup_formset %}
+        <div class='fields pickup_form'>
+            <div class='four wide field'>
+                <label>City</label>
+                {{form.city}}
+            </div>
+            <div class='four wide field'>
+                <label>State</label>
+                {{form.state}}
+            </div>
+            <div class='three wide field'>
+                <label>Zipcode</label>
+                {{form.zipcode}}
+            </div>
+            <div class='four wide field'>
+                <label>Date</label>
+                {{form.date}}
+            </div>
+            <div class='one wide field'>
+            {% if not forloop.last %}
+                <label>Delete</label>
+                <div class='ui checkbox'>
+                    {{form.DELETE}}
+                </div>
+            {% endif %}
+            </div>
+            {% for hidden_field in form.hidden_fields %}
+                {{hidden_field}}
+            {% endfor %}
+        </div>
+    {% endfor %}
+    </div>
+    
+    <h5 class='ui top attached header'>To &nbsp &nbsp<a class='ui tiny blue button' id='delivery'>Add Delivery</a></h5>
+    <div class='ui attached segment' id='delivery_formset'>
+    {{delivery_formset.management_form}}
+    {% for form in delivery_formset %}
+        <div class='fields delivery_form'>
+            <div class='four wide field'>
+                <label>City</label>
+                {{form.city}}
+            </div>
+            <div class='four wide field'>
+                <label>State</label>
+                {{form.state}}
+            </div>
+            <div class='three wide field'>
+                <label>Zipcode</label>
+                {{form.zipcode}}
+            </div>
+            <div class='four wide field'>
+                <label>Date</label>
+                {{form.date}}
+            </div>
+            <div class='one wide field'>
+            {% if not forloop.last %}
+                <label>Delete</label>
+                <div class='ui checkbox'>
+                    {{form.DELETE}}
+                </div>
+            {% endif %}
+            </div>
+            {% for hidden_field in form.hidden_fields %}
+                {{hidden_field}}
+            {% endfor %}
+        </div>
+    {% endfor %}
+    </div>
+    
+    <div class='three fields' style='margin-top:20px;'>
+        <div class='field'>
+            <label class='optional'>Rate Per Mile</label>
+            {{form.rate}}
+        </div>
+        <div class='field'>
+            <label class='optional'>Miles</label>
+            {{form.miles}}
+        </div>
+        <div class='field'>
+            <label class='optional'>Actual Miles</label>
+            {{form.actual_miles}}
+        </div>
+    </div>
+    <div class='ui divider'></div>
+    <button type='submit' class='ui green button' id='submitform'>Submit</button>
+    
+</form>
+{% endblock %}

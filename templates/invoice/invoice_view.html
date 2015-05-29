@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}Invoice {{invoice.number}}{% endblock title %}
+{% block body %}
+
+<div class='ui grid'>
+    <div class='doubling two column row'>
+        <div class='column'>
+            <h1 class='ui header'>
+                Invoice {{invoice}}
+                {% if invoice.faxed_emailed %}
+                <i class='ui green label'>invoice sent</i>
+                {% endif %}
+                {% if invoice.deleted %}
+                <i class='ui red label'>Deleted</i>
+                {% endif %}
+            </h1>
+        </div>
+        <div class='right aligned column'>
+            <div class="ui tiny buttons">
+                <a class="ui button" href='/invoice/print/{{invoice.id}}/' target="_blank">
+                    <i class="print icon"></i>Print
+                </a>
+                <a href='/invoice/pay/{{invoice.id}}/' class='ui link button'><i class="dollar icon"></i>Pay</a>
+                {% if not invoice.faxed_emailed %}
+                <a href='/invoice/sent/{{invoice.id}}/' class='ui link button'><i class="envelope icon"></i>Mark Sent</a>
+                {% endif %}
+                <a href='/invoice/edit/{{invoice.id}}/' class='ui link button'><i class="edit icon"></i>Edit</a>
+                {% if not invoice.deleted %}
+                <a href='/invoice/delete/{{invoice.id}}/' class='ui red link button'><i class="remove circle icon"></i>Delete</a>
+                {% else %}
+                <a href='/invoice/reactivate/{{invoice.id}}/' class='ui orange link button'><i class="add circle icon"></i>Reactivate</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class='ui divider'></div>
+<div class='ui segment'>
+    <div class='ui grid'>
+        <div class='two column row'>
+            <div class='ui four wide column'><b>Company</b></div>
+            <div class='ui twelve column'>{{invoice.trip.company}}</div>
+        </div>
+        <div class='two column row'>
+            <div class='ui four wide column'><b>Driver</b></div>
+            <div class='ui twelve column'>{{invoice.trip.driver}}</div>
+        </div>
+        <div class='two column row'>
+            <div class='ui four wide column'><b>Price</b></div>
+            <div class='ui twelve column'>${{invoice.price}}</div>
+        </div>
+        {% if invoice.additionalcost_set.all %}
+        <div class='two column row'>
+            <div class='ui four wide column'><b>Additional Costs</b></div>
+            <div class='ui twelve column'>
+                <div class='ui grid'>
+                    {% for cost in invoice.additionalcost_set.all %}
+                    <div class='row'>
+                        <div class='six wide column'>${{cost.cost}}</div>
+                        <div class='six wide column'>{{cost.name}}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class='two column row'>
+            <div class='ui four wide column'><b>Trip</b></div>
+            <div class='ui twelve column'>
+                <a href='/trip/view/{{invoice.trip.id}}/'>
+                    {{invoice.trip.get_from_information}} &nbsp to &nbsp {{invoice.trip.get_to_information}}
+                </a>
+            </div>
+        </div>
+        <div class='two column row'>
+            <div class='ui four wide column'><b>Miles</b></div>
+            <div class='ui twelve column'>{{invoice.trip.actual_miles}}</div>
+        </div>
+    </div>
+</div>
+{% if invoice.payment_set.all %}
+<h3>Payments</h3>
+<div class='ui segment'>
+    <div class='ui grid'>
+        {% for payment in invoice.payment_set.all %}
+        <div class='two column row'>
+            <div class='ui four wide column'>Amount</div>
+            <div class='ui twelve column'>${{payment.amount}}</div>
+        </div>
+        <div class='two column row'>
+            <div class='ui four wide column'>Check/Direct Deposit</div>
+            <div class='ui twelve column'>{{payment.get_check_or_direct_deposit_info}}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock body %}

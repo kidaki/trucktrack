@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Company Form{% endblock title %}
+{% block body %}
+<h2>Company Form</h2>
+<div class='ui divider'></div>
+<form class='ui form' method='post' action=''>
+    {% csrf_token %}
+    <div class='three fields'>
+        <div class='field'>
+            <label>Company Name</label>
+            {{form.name}}
+        </div>
+        <div class='field'>
+            <label>Contact</label>
+            {{form.contact}}
+        </div>
+        <div class='field'>
+            <label>Email</label>
+            {{form.email}}
+        </div>
+    </div>
+    <div class='three fields'>
+        <div class='field'>
+            <label>Phone Number</label>
+            {{form.phone_number}}
+        </div>
+        <div class='field'>
+            <label>Fax Number</label>
+            {{form.fax_number}}
+        </div>
+    </div>
+    <div class='three fields'>
+        <div class='field'>
+            <label>Address</label>
+            {{form.address}}
+        </div>
+    </div>
+    <div class='three fields'>
+        <div class='field'>
+            <label>City</label>
+            {{form.city}}
+        </div>
+        <div class='field'>
+            <label>State</label>
+            {{form.state}}
+        </div>
+        <div class='field'>
+            <label>Zipcode</label>
+            {{form.zipcode}}
+        </div>
+    </div>
+    <div class='three fields'>
+        <div class='field'>
+            <label>Mailing Address</label>
+            {{form.mailing_address}}
+        </div>
+    </div>
+    <div class='three fields'>
+        <div class='field'>
+            <label>City</label>
+            {{form.mailing_city}}
+        </div>
+        <div class='field'>
+            <label>State</label>
+            {{form.mailing_state}}
+        </div>
+        <div class='field'>
+            <label>Zipcode</label>
+            {{form.mailing_zipcode}}
+        </div>
+    </div>
+    <div class='ui divider'></div>
+    <button type='submit' class='ui green button' id='submitform'>Submit</button>
+    
+</form>
+{% endblock %}

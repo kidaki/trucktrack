@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Drivers{% endblock  %}
+{% block body %}
+<h1>Drivers</h1>
+<div class='ui divider'></div>
+<div class='row'></div>
+<form class='ui form' action='' method='post'>
+    {% csrf_token %}
+    <div class='fields'>
+        <div class='six wide field'>
+            <input type='text' name='search' value='{{search|default:''}}' placeholder='Search'/>
+        </div>
+        <div class='field'>
+            <button type='submit' class='ui blue button'>Search</button>
+        </div>
+        <div class='field'>
+             <a href='/driver/add/' class='ui green button'>Add A Driver</a>
+        </div>
+    </div>
+</form>
+<div class='ui grid'>
+    <div class='row'>
+        <div class='sixteen wide column'>
+            <div class='ui pagination menu'>
+                <a class='icon item' href='?page=1'>
+                    <i class='angle double left icon'></i>
+                </a>
+                {% if drivers.has_previous %}
+                <a class='icon item' href='?page={{drivers.previous_page_number}}'>
+                    <i class='angle left icon'></i>
+                </a>
+                {% else %}
+                <a class='icon item' href=''>
+                    <i class='angle left disable icon'></i>
+                </a>
+                {% endif %}
+                <a class='item'>{{drivers.number}}/{{drivers.paginator.num_pages}}</a>
+                {% if drivers.has_next %}
+                <a class='icon item' href='?page={{drivers.next_page_number}}'>
+                    <i class='angle right icon'></i>
+                </a>
+                {% else %}
+                <a class='icon item'>
+                    <i class='angle right icon'></i>
+                </a>
+                {% endif %}
+                <a class='icon item' href='?page={{drivers.paginator.num_pages}}'>
+                    <i class='angle double right icon'></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if drivers %}
+<table class='ui table'>
+    <thead>
+        <tr>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for driver in drivers %}
+        <tr>
+            <td><a href='/driver/view/{{driver.id}}/'>{{driver.name}}</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}

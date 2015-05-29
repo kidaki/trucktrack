@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}Trips{% endblock  %}
+{% block script %}
+<script>
+$(function(){
+    $('#search').click(function(){
+        $(this).parents('form').submit();
+    })
+})
+</script>
+{% endblock script %}
+{% block body %}
+<h1>Trips</h1>
+<div class='ui divider'></div>
+<form class='ui form' action='' method='post'>
+    {% csrf_token %}
+    <div class='fields'>
+        <div class='field'>
+            <label>Invoices</label>
+            <select name='invoices' class='ui dropdown'>
+                <option value='all'>-----</option>
+                <option value='paid' {% if invoices == 'paid' %}selected{% endif %}>Paid</option>
+                <option value='notpaid' {% if invoices == 'notpaid' %}selected{% endif %}>Not Paid</option>
+                <option value='notinvoiced' {% if invoices == 'notinvoiced' %}selected{% endif %}>Not Invoiced</option>
+            </select>
+        </div>
+        <div class='six wide field'>
+            <label>&nbsp</label>
+            <input name='search' placeholder='Search Load# or Company' value='{{search}}'/>
+        </div>
+        <div class='field'>
+            <label>&nbsp</label>
+            <button class='ui blue button' type='submit'>Filter</button>
+        </div>
+        <div class='field'>
+            <label>&nbsp</label>
+            <a href='/trip/add/' class='ui green button'>Add A Trip</a>
+        </div>
+    </div>
+</form>
+<div class='ui divider'></div>
+<div class='ui grid'>
+    <div class='row'>
+        <div class='sixteen wide column'>
+            <div class='ui pagination menu'>
+                <a class='icon item' href='?page=1'>
+                    <i class='angle double left icon'></i>
+                </a>
+                {% if trips.has_previous %}
+                <a class='icon item' href='?page={{trips.previous_page_number}}'>
+                    <i class='angle left icon'></i>
+                </a>
+                {% else %}
+                <a class='icon item' href=''>
+                    <i class='angle left disable icon'></i>
+                </a>
+                {% endif %}
+                <a class='item'>{{trips.number}}/{{trips.paginator.num_pages}}</a>
+                {% if trips.has_next %}
+                <a class='icon item' href='?page={{trips.next_page_number}}'>
+                    <i class='angle right icon'></i>
+                </a>
+                {% else %}
+                <a class='icon item'>
+                    <i class='angle right icon'></i>
+                </a>
+                {% endif %}
+                <a class='icon item' href='?page={{trips.paginator.num_pages}}'>
+                    <i class='angle double right icon'></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% if trips %}
+<table class='ui table'>
+    <thead>
+        <tr>
+            <th>Load Number</th>
+            <th>Company</th>
+            <th>From</th>
+            <th>To</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for trip in trips %}
+        <tr {% if trip.has_invoice %}{% if not trip.has_paid_invoice %}class='warning'{% endif %}{% else %}class='error'{% endif %}>
+            <td><a href='/trip/view/{{trip.id}}/'>{{trip.load_number}}</a></td>
+            <td><a href='/company/view/{{trip.company.id}}/'>{{trip.company}}</a></td>
+            <td>{{trip.get_from_information}} ({{trip.get_pickup_date|date}})</td>
+            <td>{{trip.get_to_information}} ({{trip.get_delivery_date|date}})</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}

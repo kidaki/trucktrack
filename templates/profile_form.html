@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock title %}
+{% block body %}
+<form class='ui large form' method='post' action=''>
+    {% csrf_token %}
+    <div class='fields'>
+        <div class='large eight wide field'>
+            <label>Company Name</label>
+            {{form.company_name}}
+        </div>
+        <div class='large eight wide field'>
+            <label>Contact</label>
+            {{form.contact}}
+        </div>
+    </div>
+    <div class='fields'>
+        <div class='large six wide field'>
+            <label>Email</label>
+            {{form.email}}
+        </div>
+        <div class='large five wide field'>
+            <label>Phone Number</label>
+            {{form.phone_number}}
+        </div>
+        <div class='large five wide field'>
+            <label>Fax Number</label>
+            {{form.fax_number}}
+        </div>
+    </div>
+    <div class='ui divider'></div>
+    <div class='fields'>
+        <div class='large six wide field'>
+            <label>Address</label>
+            {{form.address}}
+        </div>
+        <div class='large four wide field'>
+            <label>City</label>
+            {{form.city}}
+        </div>
+        <div class='large two wide field'>
+            <label>State</label>
+            {{form.state}}
+        </div>
+        <div class='large four wide field'>
+            <label>Zipcode</label>
+            {{form.zipcode}}
+        </div>
+    </div>
+    <div class='fields'>
+        <div class='large six wide field'>
+            <label>Mailing Address</label>
+            {{form.mailing_address}}
+        </div>
+        <div class='large four wide field'>
+            <label>City</label>
+            {{form.mailing_city}}
+        </div>
+        <div class='large two wide field'>
+            <label>State</label>
+            {{form.mailing_state}}
+        </div>
+        <div class='large four wide field'>
+            <label>Zipcode</label>
+            {{form.mailing_zipcode}}
+        </div>
+    </div>
+    <div class='ui divider'></div>
+    <div class='field'>
+        <button type='submit' class='ui green button'>Update</button>
+    </div>
+    
+</form>
+{% endblock body %}

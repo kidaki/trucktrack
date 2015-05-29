@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}{{driver}} View{% endblock title %}
+{% block body %}
+<div class='ui grid'>
+    <div class='doubling two column row'>
+        <div class='column'>
+            <h1 class='ui header'>
+                {{driver}}
+            </h1>
+        </div>
+        <div class='right aligned column'>
+            <div class='ui tiny buttons'>
+                <a class='ui link button' href='/driver/edit/{{driver.id}}/'><i class='edit icon'></i>Edit</a>
+                <a class='ui red link button' href='/driver/delete/{{driver.id}}/'><i class='remove circle icon'></i>Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='ui divider'></div>
+<div class='ui grid'>
+    <div class='doubling two column row'>
+        <div class='eight wide column'>
+            <div class='ui segment'>
+                <div class='ui divided list'>
+                    <div class='item'>
+                        <div class='content'>
+                            <div class='ui header'>DOB</div>
+                            <div class='left-padded-div'>{{driver.dob}}</div>
+                        </div>
+                    </div>
+                    <div class='item'>
+                        <div class='content'>
+                            <div class='ui header'>Phone Number</div>
+                            <div class='left-padded-div'>{{driver.phone_number}}</div>
+                        </div>
+                    </div>
+                    <div class='item'>
+                        <div class='content'>
+                            <div class='ui header'>Address</div>
+                            <div class='left-padded-div'>{{driver.get_address}}</div>
+                        </div>
+                    </div>
+                    <div class='item'>
+                        <div class='content'>
+                            <div class='ui header'>Billing Address</div>
+                            <div class='left-padded-div'>{{driver.get_billing_address}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if driver.trip_set.all %}
+<div class='ui divider'></div>
+<h2 class='ui header'>Trips</h2>
+<table class='ui table'>
+    <thead>
+        <tr>
+            <th>From</th>
+            <th>To</th>
+            <th>Actual Miles</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for trip in driver.trip_set.all %}
+        <tr>
+            <td>
+                <a href='/trip/view/{{trip.id}}/'>
+                    {{trip.get_from_information}} - ({{trip.get_pickup_date}})
+                </a>
+            </td>
+            <td>{{trip.get_to_information}} - ({{trip.get_delivery_date}})</td>
+            <td>{{trip.actual_miles}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock body %}

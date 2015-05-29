@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block script %}
+<script src="/static/charts/Chart.Core.js"></script>
+<script src="/static/charts/Chart.Bar.js"></script>
+<script src="/static/charts/Chart.Doughnut.js"></script>
+<script src="/static/charts/legend.js"></script>
+<script>
+$(function(){
+    var salesCtx = $("#salesChart").get(0).getContext("2d");
+    var salesData = {
+        labels: [{% for month in sales.months %}'{{month}}',{% endfor %}],
+        datasets: [
+            {
+                label: "Sales",
+                fillColor: "rgba(151,187,205,0.5)",
+                strokeColor: "rgba(151,187,205,0.8)",
+                highlightFill: "rgba(151,187,205,0.75)",
+                highlightStroke: "rgba(151,187,205,1)",
+                data: {{sales.total}}
+            }
+        ]
+    };
+    var sales_chart = new Chart(salesCtx).Bar(salesData);
+    
+    var volumeCtx = $('#volumeChart').get(0).getContext('2d');
+    var volumeData = [
+        {% for company,volume in volume_sales.iteritems %}
+        {
+            value: {{volume}},
+            color:"rgba("+20*{{forloop.counter}}+","+20*{{forloop.counter}}+",205,0.5)",
+            highlight: "rgba("+20*{{forloop.counter}}+","+20*{{forloop.counter}}+",205,1)",
+            label: "{{company|safe}}",
+            labelColor:'white'
+        },
+        {% endfor %}
+    ];
+    var volume_chart = new Chart(volumeCtx).Doughnut(volumeData);
+    legend(document.getElementById("legend"), volumeData);
+})
+</script>
+{% endblock script %}
+{% block style %}
+<style>
+    .legend {
+        width: 10em;
+        margin-left:100px;
+    }
+
+    .legend .title {
+        display: block;
+        margin-bottom: 0.5em;
+        line-height: 1.2em;
+        padding: 0 0.3em;
+    }
+
+    .legend .color-sample {
+        display: block;
+        float: left;
+        width: 1em;
+        height: 1em;
+        border: 2px solid; /* Comment out if you don't want to show the fillColor */
+        border-radius: 0.5em; /* Comment out if you prefer squarish samples */
+        margin-right: 0.5em;
+    }
+</style>
+{% endblock style %}
+{% block body %}
+<h2>Home</h2>
+<div class='ui stackable grid'>
+    <div class='row'>
+        <div class='six wide column'>
+            <h4 class='ui header'>Sales for the past 6 months</h4>
+            <canvas id="salesChart" width="300" height="300"></canvas>
+        </div>
+        <div class='ten wide column'>
+            <div class='ui grid'>
+                <div class='two column row'>
+                    <div class='column'>
+                        <h4 class='ui header'>Sales Volume by Company</h4>
+                        <canvas id="volumeChart" width="300" height="300"></canvas>
+                    </div>
+                    <div class='column'>
+                        <div id='legend'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

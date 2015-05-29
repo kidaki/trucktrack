@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Invoice Payment{% endblock title %}
+{% block body %}
+<h1>Payment for Invoice #<a href='/invoice/{{invoice.id}}/'>{{invoice}}</a></h1>
+<div class='ui grid'>
+    <div class='row'>
+        <div class='column'></div>
+    </div>
+</div>
+<form class='ui form segment' action='' method='post'>
+    {% csrf_token %}
+    <input type='hidden' name='invoice' value='{{invoice.id}}'>
+    <div class='fields'>
+        <div class='four wide field'>
+            <label>Date Of Payment</label>
+            <input type='text' name='date_of_payment' id='id_date_of_payment' placeholder='mm/dd/yyyy'/>
+        </div>
+    </div>
+    <div class='fields'>
+        <div class='four wide field'>
+            <label>Amount</label>
+            {{form.amount}}
+        </div>
+        <div class='four wide field'>
+            <label>Check Number</label>
+            {{form.check_number}}
+        </div>
+        <div class='four wide field'>
+            <label>Direct Deposit Number</label>
+            {{form.direct_deposit_number}}
+        </div>
+        <div class='four wide field'>
+            <label>&nbsp</label>
+            <button class='ui blue button' type='submit'>Create</button>
+        </div>
+    </div>
+    <div class='ui divider'>
+</form>
+{% endblock body %}

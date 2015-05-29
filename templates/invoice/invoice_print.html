@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hilt Tracking Invoice {{invoice.number}}</title>
+    <link rel="stylesheet" href="/static/semantic/semantic.css" type="text/css">
+    <script src='/static/js/jquery.js'></script>
+    <script src='/static/semantic/semantic.js'></script>
+    <script>
+    $(function(){
+        $('.dropdown').dropdown();
+        $('#spacer').css('height',450-$('table').height());
+    })
+    </script>
+    <style>
+    body
+    {
+        background-color:white;
+    }
+    #main
+    {
+        padding:15px;
+    }
+    .zerorow
+    {
+        margin:0px !important;
+        padding:0px !important;
+    }
+    .border
+    {
+        border-bottom:1px solid #dfdfdf;
+    }
+    .ui.table
+    {
+        border:1px solid #000;
+    }
+    .ui.table thead th
+    {
+        border-top:none !important;
+        border-right:1px solid #000;
+        border-bottom:1px solid #000;
+        border-left:none!important;
+    }
+    .ui.table thead th:last-child
+    {
+        border-right:none;
+    }
+    .ui.table tbody td
+    {
+        border:none !important;
+        border-bottom:1px solid #000 !important;
+        border-right:1px solid #000 !important;
+    }
+    .ui.table tbody td:last-child
+    {
+        border-right:none !important;
+    }
+    .ui.table tbody tr:last-child td
+    {
+        border-bottom:none !important;
+    }
+    #spacer td
+    {
+        border-top:none !important;
+    }
+    </style>
+</head>
+<body>
+<div id='main'>
+    <div class='ui grid'>
+        <div class='left floated eight wide column'>
+            <h1>{{user.profile.company_name}}</h1>
+        </div>
+        <div class='right floated right aligned eight wide column' style='color:#999;'>
+            <h1>INVOICE</h1>
+        </div>
+    </div>
+    <div class='ui grid'>
+        <div class='row zerorow'>
+            <div class='sixteen wide column'>{{user.profile.mailing_address}}</div>
+            <div class='sixteen wide column'>{{user.profile.mailing_city}}, {{user.profile.mailing_state}} {{user.profile.mailing_zipcode}}</div>
+            <div class='sixteen wide column'>PH: {{user.profile.phone_number}} - Fax: {{user.profile.fax_number}}</div>
+        </div>
+        <div class='row zerorow'>
+            <div class='right floated right aligned three wide column'>{{invoice.date_entered|date}}</div>
+            <div class='right floated right aligned ten wide column'><b>Date</b></div>
+        </div>
+
+        <div class='row zerorow'>
+            <div class='right floated right aligned three wide column'>{{invoice.number}}</div>
+            <div class='right floated right aligned ten wide column'><b>INVOICE #</b></div>
+        </div>
+
+        <div class='row zerorow'>
+            <div class='right floated right aligned three wide column'>{{invoice.trip.load_number}}</div>
+            <div class='right floated right aligned ten wide column'><b>LOAD #</b></div>
+        </div>
+    
+    </div>
+    
+    <h3>Bill To:</h3>
+    <div><b>{{invoice.trip.company.name|title}}</b></div>
+    <div>{{invoice.trip.company.address|title}}</div>
+    <div>{{invoice.trip.company.city|title}}, {{invoice.trip.company.state|title}} {{invoice.trip.company.zipcode|title}}</div>
+    <div>{{invoice.trip.company.phone_number|title}}</div>
+
+    <table class='ui celled table'>
+        <thead>
+            <tr>
+                <th>DESCRIPTION</th>
+                <th>AMOUNT</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class='ui grid'>
+                        {% for pickup in invoice.trip.pickup_set.all %}
+                        <div class='row'>
+                            <div class='left aligned six wide column'>{{pickup.get_address_information}}</div>
+                            <div class='right aligned ten wide column'>{{pickup.date|date}}</div>
+                        </div>
+                        {% endfor %}
+                        {% for delivery in invoice.trip.delivery_set.all %}
+                        <div class='row'>
+                            <div class='left aligned six wide column'>{{delivery.get_address_information}}</div>
+                            <div class='right aligned ten wide column'>{{delivery.date|date}}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </td>
+                <td valign="bottom">
+                    <div class='ui grid'>
+                        <div class='row'>
+                            <div class='column'>${{invoice.price}}</div>
+                        </div>
+                        <div class='row'><div class='column'>&nbsp</div></div>
+                    </div>
+                </td>
+            </tr>
+        {% for additional_cost in invoice.additionalcost_set.all %}
+            <tr>
+                <td>{{additional_cost.name}}</td>
+                <td>${{additional_cost.cost}}</td>
+            </tr>
+        {% endfor %}
+            <tr id='spacer'><td></td><td></td></tr>
+            <tr style='background-color:rgba(0, 0, 50, 0.027451)'>
+                <td>
+                    <div class='ui grid'>
+                        <div class='right aligned sixteen wide column'><b>Total</b></div>
+                    </div>
+                </td>
+                <td>${{invoice.get_total}}</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div class='ui grid'>
+        <div class='row'></div>
+        <div class='row zerorow'>
+            <div class='sixteen wide column'>
+                Make all checks payable to {{user.profile.company_name}}
+            </div>
+        </div>
+        <div class='row zerorow'>
+            <div class='sixteen wide column'>
+                If you have any questions concerning this invoice, contact:
+            </div>
+        </div>
+        <div class='row zerorow'>
+            <div class='sixteen wide column'>
+                {{user.profile.contact}} &nbsp &nbsp 
+                {{user.profile.phone_number}} &nbsp &nbsp 
+                {{user.profile.email}}
+            </div>
+        </div>
+        <div class='row center aligned'><div class='sixteen wide column'><b>THANK YOU FOR YOUR BUSINESS!</b></div></div>
+    </div>
+</div>  
+</body>

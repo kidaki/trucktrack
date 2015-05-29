@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Truck Sheets | {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="/static/semantic/semantic.css" type="text/css">
+    {% block link %}{% endblock link %}
+    <script src='/static/js/jquery.js'></script>
+    <script src='/static/semantic/semantic.js'></script>
+    <script>
+    $(function(){
+        $('.dropdown').dropdown();
+    })
+    </script>
+    {% block script %}{% endblock %}
+    <style>
+    body
+    {
+        padding-bottom:10px;
+    }
+    #main
+    {
+        padding:10px 5%;
+    }
+    label.optional
+    {
+        color:#999 !important;
+    }
+    div.field.toppad
+    {
+        padding-top:8px;
+    }
+    .left-padded-div
+    {
+        padding-left:20px;
+    }
+    </style>
+    {% block style %}{% endblock style %}
+</head>
+<body>
+    <div class="ui secondary pointing menu">
+        <a class="item" href='/'>
+            <i class="home icon"></i> Home
+        </a>
+        <a class='item' href='/invoices/'>Invoices</a>
+        <div class='ui dropdown item'>
+            Companies <i class='dropdown icon'></i>
+            <div class='menu'>
+                <a href='/company/add/' class='item'>Add Company</a>
+                <a href='/companies/' class='item'>View Companies</a>
+            </div>
+        </div>
+        <div class='ui dropdown item'>
+            Drivers <i class='dropdown icon'></i>
+            <div class='menu'>
+                <a href='/driver/add/' class='item'>Add Driver</a>
+                <a href='/drivers/' class='item'>View Drivers</a>
+            </div>
+        </div>
+        <div class='ui dropdown item'>
+            Trips <i class='dropdown icon'></i>
+            <div class='menu'>
+                <a href='/trip/add/' class='item'>Add Trip</a>
+                <a href='/trips/' class='item'>View Trips</a>
+            </div>
+        </div>
+        <div class="right menu">
+            <div class='item'>
+                <a href='/profile/' class='settings icon'><i class='settings icon'></i></a>
+                {{user.profile}}
+            </div>
+            <a class="ui item" href='/logout'> Logout
+            </a>
+        </div>
+    </div>
+    <div id='main'>
+    {% block body %}{% endblock %}
+    </div>
+</body>
+</html>

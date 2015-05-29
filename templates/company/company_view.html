@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}{{company}} View{% endblock title %}
+{% block body %}
+<div class='ui grid'>
+    <div class='doubling two column row'>
+        <div class='column'>
+            <h1 class='ui header'>{{company}}</h1>
+        </div>
+        <div class='right aligned column'>
+            <div class='ui tiny buttons'>
+                <a class='ui link button' href='/company/edit/{{company.id}}'><i class='edit icon'></i>Edit</a>
+                <a class='ui red link button' href='/company/delete/{{company.id}}'><i class='remove circle icon'></i>Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='ui grid'>
+    <div class='doubling two column row'>
+        <div class='eight wide column'>
+            <div class='ui segment'>
+                <div class='ui divided list'>
+                    <div class='item'>
+                        <div class='content'>
+                            <div class='ui header'>Contact</div>
+                            <div class='left-padded-div'>{{company.contact}}</div>
+                        </div>
+                    </div>
+                    <div class='item'>
+                        <div class='content'>
+                            <div class='ui header'>Email</div>
+                            <div class='left-padded-div'>{{company.email}}</div>
+                        </div>
+                    </div>
+                    <div class='item'>
+                        <div class='content'>
+                            <div class='ui header'>Phone</div>
+                            <div class='left-padded-div'>{{company.phone_number}}</div>
+                        </div>
+                    </div>
+                    <div class='item'>
+                        <div class='content'>
+                            <div class='ui header'>Email</div>
+                            <div class='left-padded-div'>{{company.fax_number}}</div>
+                        </div>
+                    </div>
+                    <div class='item'>
+                        <div class='content'>
+                            <div class='ui header'>Address</div>
+                            <div class='left-padded-div'>{{company.get_address}}</div>
+                        </div>
+                    </div>
+                    <div class='item'>
+                        <div class='content'>
+                            <div class='ui header'>Mailing Address</div>
+                            <div class='left-padded-div'>{{company.get_mailing_address}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='ui divider'></div>
+<h3 class='ui red header'>${{company.get_unpaid_invoices_total}} in unpaid invoices</h3>
+<div class='ui divider'></div>
+    <h2 class='ui header'>Invoices</h2>
+    <table class='ui table'>
+        <thead>
+            <tr>
+                <th>Invoice Number</th>
+                <th>Load Number</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Amount Paid</th>
+                <th class='right aligned'>Faxed/Emailed</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for invoice in company.get_all_invoices %}
+            <tr>
+                <td>
+                    <a href='/invoice/view/{{invoice.id}}'>{{invoice.number}}</a>
+                </td>
+                <td>
+                    <a href='/trip/view/{{invoice.trip.id}}'>{{invoice.trip.load_number}}</a>
+                </td>
+                <td>{{invoice.date}}</td>
+                <td>{{invoice.get_total}}</td>
+                <td>{{invoice.get_payment_total}}</td>
+                <td class='right aligned'>{% if invoice.faxed_emailed %}<i class='icon checkmark'></i>{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock body %}

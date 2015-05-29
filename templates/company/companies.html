@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}Companies{% endblock  %}
+{% block body %}
+<h1>Companies</h1>
+<div class='ui divider'></div>
+<form class='ui form' action='' method='post'>
+    {% csrf_token %}
+    <div class='fields'>
+        <div class='six wide field'>
+            <input type='text' name='search' value='{{search|default:''}}' placeholder='Search'/>
+        </div>
+        <div class='field'>
+            <button type='submit' class='ui blue button'>Search</button>
+        </div>
+        <div class='field'>
+             <a href='/company/add/' class='ui green button'>Add A Company</a>
+        </div>
+    </div>
+</form>
+<div class='ui grid'>
+    <div class='row'>
+        <div class='sixteen wide column'>
+            <div class='ui pagination menu'>
+                <a class='icon item' href='?page=1'>
+                    <i class='angle double left icon'></i>
+                </a>
+                {% if companies.has_previous %}
+                <a class='icon item' href='?page={{companies.previous_page_number}}'>
+                    <i class='angle left icon'></i>
+                </a>
+                {% else %}
+                <a class='icon item' href=''>
+                    <i class='angle left disable icon'></i>
+                </a>
+                {% endif %}
+                <a class='item'>{{companies.number}}/{{companies.paginator.num_pages}}</a>
+                {% if companies.has_next %}
+                <a class='icon item' href='?page={{companies.next_page_number}}'>
+                    <i class='angle right icon'></i>
+                </a>
+                {% else %}
+                <a class='icon item'>
+                    <i class='angle right icon'></i>
+                </a>
+                {% endif %}
+                <a class='icon item' href='?page={{companies.paginator.num_pages}}'>
+                    <i class='angle double right icon'></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% if companies %}
+<table class='ui table'>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Contact</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Fax Number</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for company in companies %}
+        <tr>
+            <td><a href='/company/view/{{company.id}}/'>{{company.name}}</a></td>
+            <td>{{company.get_address}}</td>
+            <td>{{company.contact}}</td>
+            <td>{{company.email}}</td>
+            <td>{{company.phone_number}}</td>
+            <td>{{company.fax_number}}</td>
+            <td class='right aligned'>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}
